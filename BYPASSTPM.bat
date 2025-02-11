@@ -21,4 +21,4 @@ Reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v "BypassRAMCheck" /t REG_DWORD /d "1" 
 Reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v "BypassTPMCheck" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v "BypassSecureBootCheck" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v "AllowUpgradesWithUnsupportedTPMOrCPU" /t REG_DWORD /d "1" /f
-timeout 3 & Exit
+del "%%~f0" & Exit
