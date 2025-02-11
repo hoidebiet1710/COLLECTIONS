@@ -1,102 +1,68 @@
-﻿CHCP 1258 >nul 2>&1
-CHCP 65001 >nul 2>&1
-@echo off & color 1f
+@echo off & color 1f & mode con: cols=100 lines=80
 setlocal enabledelayedexpansion
-Title ACTIVATION WINDOW_OFFICE BY THNAM 0942.433.452
-mode con: cols=100 lines=80
-CHCP 65001 >nul 2>&1
->nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
-if '%errorlevel%' NEQ '0' (
-    echo  Run CMD as Administrator...
-    goto goUAC 
-) else (
- goto goADMIN )
- 
-:goUAC
-    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    set params = %*:"=""
-    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
-    "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
-    exit /B
-
-:goADMIN
-    pushd "%~dp0"
-    cd /d "%~dp0"
-
-:: Thông tin phiên bản
-set "VERSION=Version 3"
-set "AUTHOR=TRAN HOANG NAM"
-set "DATE=2025-02-10"
-
 :MENU
 cls
 ECHO..................................................................
-ECHO    	ACTIVATE WINDOW_OFFICE BY KEY AND SETUP ONLINE OFFICE
+ECHO    	        ACTIVATE WINDOW_OFFICE BY KEY
 ECHO.
-echo           Phiên bản:         %VERSION%
-echo           Tác giả:           %AUTHOR%
-echo           Ngày cập nhật:     %DATE%
 ECHO..................................................................
 ECHO.
 ECHO           0. Exit
 ECHO.
-ECHO           1. FOR WINDOW WITH ONLINE KEY 
+ECHO           1. Online Window Activation 
 ECHO.
-ECHO           2. FOR WINDOW WITH BYPHONE KEY
+ECHO           2. Online Office Activation
 ECHO.
-ECHO           3. FOR OFFICE WITH ONLINE KEY
+ECHO           3. Byphone Windows Activation
 ECHO.
-ECHO           4. FOR OFFICE WITH BYPHONE KEY
+ECHO           4. Byphone Office Activation
 ECHO.
 ECHO..................................................................
 ECHO.
-SET /P M=      Choose a Number (Ex: 2) then press ENTER:   
+set /p choice=Nhap lua chon (1-4): 
 ECHO.
-IF %M%==0 GOTO TheEnd
-IF %M%==1 GOTO WinOnline
-IF %M%==2 GOTO Winbyphone
-IF %M%==3 GOTO OffOnline
-IF %M%==4 GOTO Offbyphone
+if %choice%==0 goto TheEnd
+if %choice%==1 goto winonl
+if %choice%==2 goto officeonl
+if %choice%==3 goto winbyphone
+if %choice%==4 goto officebyphone
 
-:WinOnline
+:winonl
 cd %windir%\system32
-set /p k1= Nhap Key : 
-cls
-cscript slmgr.vbs /rilc >nul
-cscript slmgr.vbs /upk >nul
-cscript slmgr.vbs /cpky >nul
-cscript slmgr.vbs /ckms >nul
+set /p key=Nhap key Windows: 
+cscript //nologo %windir%\system32\slmgr.vbs /rilc >nul 2>&1
+cscript //nologo %windir%\system32\slmgr.vbs /upk >nul 2>&1
+cscript //nologo %windir%\system32\slmgr.vbs /ckms >nul 2>&1
+cscript //nologo %windir%\system32\slmgr.vbs /cpky >nul 2>&1
 sc config Winmgmt start=demand & net start Winmgmt
 sc config LicenseManager start= auto & net start LicenseManager
 sc config wuauserv start= auto & net start wuauserv
-cls
-cscript slmgr.vbs /ipk %k1% >nul & cscript slmgr.vbs -ato
-cscript //nologo %windir%\system32\slmgr.vbs /xpr & cscript //nologo %windir%\system32\slmgr.vbs /dli
-pause >nul
-GOTO MENU
-)
+cscript //nologo %windir%\system32\slmgr.vbs /ipk %key%
+cscript //nologo %windir%\system32\slmgr.vbs /ato
+cscript //nologo %windir%\system32\slmgr.vbs /xpr
+cscript //nologo %windir%\system32\slmgr.vbs /dli
+pause 2>nul & GOTO MENU
 
-:Winbyphone
+:winbyphone
 cd %windir%\system32
-set /p k1= Nhap Key : 
-cls
-cscript slmgr.vbs /rilc >nul
-cscript slmgr.vbs /upk >nul
-cscript slmgr.vbs /cpky >nul
-cscript slmgr.vbs /ckms >nul
+set /p key=Nhap key Windows: 
+cscript //nologo %windir%\system32\slmgr.vbs /rilc >nul 2>&1
+cscript //nologo %windir%\system32\slmgr.vbs /upk >nul 2>&1
+cscript //nologo %windir%\system32\slmgr.vbs /ckms >nul 2>&1
+cscript //nologo %windir%\system32\slmgr.vbs /cpky >nul 2>&1
 sc config Winmgmt start=demand & net start Winmgmt
 sc config LicenseManager start= auto & net start LicenseManager
 sc config wuauserv start= auto & net start wuauserv
-cscript slmgr.vbs /ipk %k1% >nul
+cscript //nologo %windir%\system32\slmgr.vbs /ipk %key%
 cls
-cscript slmgr.vbs /dti>C:\Win.txt & start C:\Win.txt
+cscript //nologo %windir%\system32\slmgr.vbs /dti>C:\Win.txt & start C:\Win.txt
 start "" https://getcid.info/
 set /p CID= Nhap confirmation ID : 
-cscript slmgr.vbs /atp %CID% & cscript slmgr.vbs /ato
-cscript //nologo %windir%\system32\slmgr.vbs /xpr & cscript //nologo %windir%\system32\slmgr.vbs /dli
-pause >nul
-GOTO MENU
+cscript //nologo %windir%\system32\slmgr.vbs %CID%
+cscript //nologo %windir%\system32\slmgr.vbs /ato
+cscript //nologo %windir%\system32\slmgr.vbs /xpr
+cscript //nologo %windir%\system32\slmgr.vbs /dli
+pause 2>nul & GOTO MENU
 )
 
 :OffOnline
