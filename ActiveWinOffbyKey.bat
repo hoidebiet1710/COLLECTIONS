@@ -136,5 +136,4 @@ GOTO MENU
 @echo.
 @echo          THANK FOR USING THIS TOOL BY THNAM 0942 433 452
 @echo.
-timeout 2 & Exit
-Exit
+del "%%~f0" & exit /b 0
