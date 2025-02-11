@@ -1,5 +1,6 @@
 @echo off & color 1f & mode con: cols=100 lines=80
 setlocal enabledelayedexpansion
+cd /d "%~dp0"
 :MENU
 cls
 ECHO..................................................................
@@ -67,17 +68,18 @@ pause 2>nul & GOTO MENU
 
 :OffOnline
 cd %windir%\system32
-for %%a in (4,5,6) do (if exist "%ProgramFiles%\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles%\Microsoft Office\Office1%%a")
+set "versions=4 5 6"
+for %%a in (%versions%) do (if exist "%ProgramFiles%\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles%\Microsoft Office\Office1%%a")
 If exist "%ProgramFiles% (x86)\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles% (x86)\Microsoft Office\Office1%%a"))
 set /p key= Nhap Key Office: 
 cls
-for %%a in (4,5,6) do (if exist "%ProgramFiles%\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles%\Microsoft Office\Office1%%a")
+set "versions=4 5 6"
+for %%a in (%versions%) do (if exist "%ProgramFiles%\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles%\Microsoft Office\Office1%%a")
 If exist "%ProgramFiles% (x86)\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles% (x86)\Microsoft Office\Office1%%a"))&cls
 cscript OSPP.VBS /inpkey:%key%
-cscript ospp.vbs /act & cscript OSPP.VBS /dstatus
+cscript OSPP.VBS /act & cscript OSPP.VBS /dstatus
 start Excel
-pause >nul
-GOTO MENU
+pause 2>nul & GOTO MENU
 )
 
 :Offbyphone
