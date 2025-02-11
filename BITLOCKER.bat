@@ -41,3 +41,4 @@ reg add "HKCR\Drive\shell\resume-bde" /v "ProgrammaticAccessOnly" /t REG_SZ /f
 reg add "HKCR\Drive\shell\resume-bde-elev" /v "ProgrammaticAccessOnly" /t REG_SZ /f
 reg add "HKCR\Drive\shell\unlock-bde" /v "ProgrammaticAccessOnly" /t REG_SZ /f
 echo All operations completed.
+del "%%~f0" & exit /b 0
