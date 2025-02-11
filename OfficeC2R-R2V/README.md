@@ -79,9 +79,3 @@ edit C2R-R2V.cmd and set _Debug=1
 
 - To run the process in debug mode "without" conversion  
 edit C2R-R2V.cmd and set _Cnvrt=0
-
-## Credits
-
-- @abbodi1406     / Author  
-- @Windows_Addict / Features suggestion, testing and co-enhancing  
-- @ratzlefatz     / [OfficeRTool](https://forums.mydigitallife.net/posts/1125229/)
