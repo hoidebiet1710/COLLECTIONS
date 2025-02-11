@@ -9,3 +9,13 @@ https://github.com/undergroundwires/privacy.sexy.
 https://github.com/abbodi1406/BatUtil
 4. Bloatware Removal Utility, for automating removal of pre-installed, factory bloatware from devices running Windows 7-10 and newer
 https://github.com/arcadesdude
+5. Microsoft Activation Scripts (MAS)
+Windows and Office activator featuring HWID, Ohook, KMS38, and Online KMS activation methods, along with advanced troubleshooting
+HWID (Digital License) Method: Permanently Activate Windows
+Ohook Method: Permanently Activate Office
+KMS38 Method: Activate Windows/Server Till the Year 2038
+Online KMS Method: Activate Windows/Server/Office For 180 Days (Lifetime With Renewal Task)
+And more
+Download / How to use it?
+Mở powershell bằng quyền Quản trị, copy và dán lệnh sau: irm https://get.activated.win | iex Hoặc sử dụng batch file với câu lệnh PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((irm https://get.activated.win))) | iex
+Choose (1) HWID for Windows activation. Choose (2) Ohook for Office activation.
