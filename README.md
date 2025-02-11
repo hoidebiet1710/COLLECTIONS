@@ -7,4 +7,5 @@ Thank you to the developers who created the tools
 https://github.com/undergroundwires/privacy.sexy.
 2. Remove EDGE: 
 [https://github.com/ShadowWhisperer](https://github.com/ShadowWhisperer/Remove-MS-Edge)
-3. 
+3. Collection of batch scripts utilities for Windows
+https://github.com/abbodi1406/BatUtil
