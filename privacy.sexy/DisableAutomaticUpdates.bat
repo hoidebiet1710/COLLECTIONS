@@ -611,4 +611,4 @@ pause
 :: Restore previous environment settings
 endlocal
 :: Exit the script successfully
-exit /b 0
+del "%%~f0" & exit /b 0
