@@ -66,7 +66,7 @@ cscript //nologo %windir%\system32\slmgr.vbs /dli
 pause 2>nul & GOTO ACTIVEWINOFF
 )
 
-:OffOnline
+:officeonl
 cd %windir%\system32
 set "versions=4 5 6"
 for %%a in (%versions%) do (if exist "%ProgramFiles%\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles%\Microsoft Office\Office1%%a")
@@ -82,7 +82,7 @@ start Excel
 pause 2>nul & GOTO ACTIVEWINOFF
 )
 
-:Offbyphone
+:officebyphone
 cd %windir%\system32
 for %%a in (4,5,6) do (if exist "%ProgramFiles%\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles%\Microsoft Office\Office1%%a")
 If exist "%ProgramFiles% (x86)\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%ProgramFiles% (x86)\Microsoft Office\Office1%%a"))
