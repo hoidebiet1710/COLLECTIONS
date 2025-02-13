@@ -1,12 +1,12 @@
 @echo off & color 1f & mode con: cols=100 lines=80
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-:MENU
+:ACTIVEWINOFF
 cls
-ECHO..................................................................
-ECHO    	        ACTIVATE WINDOW_OFFICE BY KEY
+ECHO................................................
+ECHO    	    ACTIVATE WINDOW_OFFICE BY KEY
 ECHO.
-ECHO..................................................................
+ECHO................................................
 ECHO.
 ECHO           0. Exit
 ECHO.
@@ -42,7 +42,7 @@ cscript //nologo %windir%\system32\slmgr.vbs /ipk %key%
 cscript //nologo %windir%\system32\slmgr.vbs /ato
 cscript //nologo %windir%\system32\slmgr.vbs /xpr
 cscript //nologo %windir%\system32\slmgr.vbs /dli
-pause 2>nul & GOTO MENU
+pause 2>nul & GOTO ACTIVEWINOFF
 
 :winbyphone
 cd %windir%\system32
@@ -63,7 +63,7 @@ cscript //nologo %windir%\system32\slmgr.vbs %CID%
 cscript //nologo %windir%\system32\slmgr.vbs /ato
 cscript //nologo %windir%\system32\slmgr.vbs /xpr
 cscript //nologo %windir%\system32\slmgr.vbs /dli
-pause 2>nul & GOTO MENU
+pause 2>nul & GOTO ACTIVEWINOFF
 )
 
 :OffOnline
@@ -79,7 +79,7 @@ If exist "%ProgramFiles% (x86)\Microsoft Office\Office1%%a\ospp.vbs" (cd /d "%Pr
 cscript OSPP.VBS /inpkey:%key%
 cscript OSPP.VBS /act & cscript OSPP.VBS /dstatus
 start Excel
-pause 2>nul & GOTO MENU
+pause 2>nul & GOTO ACTIVEWINOFF
 )
 
 :Offbyphone
@@ -96,12 +96,11 @@ set /p CID= Nhap confirmation ID :
 cscript ospp.vbs /actcid:%CID% & cscript ospp.vbs /act
 cscript ospp.vbs /dstatus >>C:\Office.txt & start C:\Office.txt
 start Excel
-pause >nul
-GOTO MENU
+pause >nul & GOTO ACTIVEWINOFF
 )
 
 :TheEnd
 @echo.
 @echo          THANK FOR USING THIS TOOL BY THNAM 0942 433 452
 @echo.
-del "%%~f0" & exit /b 0
+del "%~f0" & exit /b 0
