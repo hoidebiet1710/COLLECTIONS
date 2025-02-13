@@ -1,7 +1,8 @@
 @echo off & color 1f
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-echo 
+echo --- BYPASS TPM2.0_CHECK RAM, SECURITY....
+ECHO.
 Reg.exe add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\Applicability" /v "BranchName" /t REG_SZ /d "Dev" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\Applicability" /v "Ring" /t REG_SZ /d "External" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\Applicability" /v "ContentType" /t REG_SZ /d "Mainline" /f
