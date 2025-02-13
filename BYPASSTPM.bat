@@ -1,6 +1,7 @@
 @echo off & color 1f
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
+echo 
 Reg.exe add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\Applicability" /v "BranchName" /t REG_SZ /d "Dev" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\Applicability" /v "Ring" /t REG_SZ /d "External" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\WindowsSelfHost\Applicability" /v "ContentType" /t REG_SZ /d "Mainline" /f
@@ -21,4 +22,4 @@ Reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v "BypassRAMCheck" /t REG_DWORD /d "1" 
 Reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v "BypassTPMCheck" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v "BypassSecureBootCheck" /t REG_DWORD /d "1" /f
 Reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v "AllowUpgradesWithUnsupportedTPMOrCPU" /t REG_DWORD /d "1" /f
-del "%%~f0" & Exit
+del "%~f0" & Exit /b 0
