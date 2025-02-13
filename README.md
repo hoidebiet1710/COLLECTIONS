@@ -15,3 +15,4 @@ Download / How to use it?
 Mở powershell bằng quyền Quản trị, copy và dán lệnh sau: irm https://get.activated.win | iex
 Hoặc sử dụng batch file với câu lệnh PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((irm https://get.activated.win))) | iex
 Choose (1) HWID for Windows activation. Choose (2) Ohook for Office activation.
+6. Downloads setup.exe from https://officecdn.microsoft.com/pr/wsus/setup.exe
