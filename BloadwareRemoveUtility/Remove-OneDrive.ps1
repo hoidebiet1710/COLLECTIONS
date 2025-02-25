@@ -1,246 +1,156 @@
-<#
-.SYNOPSIS
-    Uninstalls Microsoft OneDrive. Usage: UninstallOneDrive
-.DESCRIPTION
-    Uninstalls Microsoft OneDrive. Usage: UninstallOneDrive
-#>
-[CmdletBinding()]
-param (
-    [switch]$CheckForUpdate,
-    [switch]$UpdateSelf,
-    [switch]$Version,
-    [switch]$Help
-)
+function force-mkdir($path) {
+if (!(Test-Path $path)) {
+    #Write-Host "-- Creating full path to: " $path -ForegroundColor White -BackgroundColor DarkGreen
+    New-Item -ItemType Directory -Force -Path $path
+}}
 
-#Requires -RunAsAdministrator
-
-# Version
-$CurrentVersion = '1.0.2'
-$RepoOwner = 'asheroto'
-$RepoName = 'UninstallOneDrive'
-$PowerShellGalleryName = 'UninstallOneDrive'
-
-# Display version if -Version is specified
-if ($Version.IsPresent) {
-    $CurrentVersion
-    exit 0
-}
-
-# Display full help if -Help is specified
-if ($Help) {
-    Get-Help -Name $MyInvocation.MyCommand.Source -Full
-    exit 0
-}
-
-# Display $PSVersionTable and Get-Host if -Verbose is specified
-if ($PSBoundParameters.ContainsKey('Verbose') -and $PSBoundParameters['Verbose']) {
-    $PSVersionTable
-    Get-Host
-}
-
-function Get-GitHubRelease {
-    <#
-        .SYNOPSIS
-        Fetches the latest release information of a GitHub repository.
-
-        .DESCRIPTION
-        This function uses the GitHub API to get information about the latest release of a specified repository, including its version and the date it was published.
-
-        .PARAMETER Owner
-        The GitHub username of the repository owner.
-
-        .PARAMETER Repo
-        The name of the repository.
-
-        .EXAMPLE
-        Get-GitHubRelease -Owner "asheroto" -Repo "winget-install"
-        This command retrieves the latest release version and published datetime of the winget-install repository owned by asheroto.
-    #>
-    [CmdletBinding()]
-    param (
-        [string]$Owner,
-        [string]$Repo
-    )
-    try {
-        $url = "https://api.github.com/repos/$Owner/$Repo/releases/latest"
-        $response = Invoke-RestMethod -Uri $url -ErrorAction Stop
-
-        $latestVersion = $response.tag_name
-        $publishedAt = $response.published_at
-
-        # Convert UTC time string to local time
-        $UtcDateTime = [DateTime]::Parse($publishedAt, [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::RoundtripKind)
-        $PublishedLocalDateTime = $UtcDateTime.ToLocalTime()
-
-        [PSCustomObject]@{
-            LatestVersion     = $latestVersion
-            PublishedDateTime = $PublishedLocalDateTime
+  function Takeown-Registry($key) {
+    # TODO does not work for all root keys yet
+    switch ($key.split('\')[0]) {
+        "HKEY_CLASSES_ROOT" {
+            $reg = [Microsoft.Win32.Registry]::ClassesRoot
+            $key = $key.substring(18)
         }
-    } catch {
-        Write-Error "Unable to check for updates.`nError: $_"
-        exit 1
-    }
-}
-
-function CheckForUpdate {
-    param (
-        [string]$RepoOwner,
-        [string]$RepoName,
-        [version]$CurrentVersion,
-        [string]$PowerShellGalleryName
-    )
-
-    $Data = Get-GitHubRelease -Owner $RepoOwner -Repo $RepoName
-
-    Write-Output ""
-    Write-Output ("Repository:       {0,-40}" -f "https://github.com/$RepoOwner/$RepoName")
-    Write-Output ("Current Version:  {0,-40}" -f $CurrentVersion)
-    Write-Output ("Latest Version:   {0,-40}" -f $Data.LatestVersion)
-    Write-Output ("Published at:     {0,-40}" -f $Data.PublishedDateTime)
-
-    if ($Data.LatestVersion -gt $CurrentVersion) {
-        Write-Output ("Status:           {0,-40}" -f "A new version is available.")
-        Write-Output "`nOptions to update:"
-        Write-Output "- Download latest release: https://github.com/$RepoOwner/$RepoName/releases"
-        if ($PowerShellGalleryName) {
-            Write-Output "- Run: $RepoName -UpdateSelf"
-            Write-Output "- Run: Install-Script $PowerShellGalleryName -Force"
+        "HKEY_CURRENT_USER" {
+            $reg = [Microsoft.Win32.Registry]::CurrentUser
+            $key = $key.substring(18)
         }
-    } else {
-        Write-Output ("Status:           {0,-40}" -f "Up to date.")
+        "HKEY_LOCAL_MACHINE" {
+            $reg = [Microsoft.Win32.Registry]::LocalMachine
+            $key = $key.substring(19)
+        }
     }
-    exit 0
+
+    # get administraor group
+    $admins = New-Object System.Security.Principal.SecurityIdentifier("S-1-5-32-544")
+    $admins = $admins.Translate([System.Security.Principal.NTAccount])
+
+    # set owner
+    $key = $reg.OpenSubKey($key, "ReadWriteSubTree", "TakeOwnership")
+    $acl = $key.GetAccessControl()
+    $acl.SetOwner($admins)
+    $key.SetAccessControl($acl)
+
+    # set FullControl
+    $acl = $key.GetAccessControl()
+    $rule = New-Object System.Security.AccessControl.RegistryAccessRule($admins, "FullControl", "Allow")
+    $acl.SetAccessRule($rule)
+    $key.SetAccessControl($acl)
 }
 
-function UpdateSelf {
-    try {
-        # Get PSGallery version of script
-        $psGalleryScriptVersion = (Find-Script -Name $PowerShellGalleryName).Version
+function Takeown-File($path) {
+    takeown.exe /A /F $path
+    $acl = Get-Acl $path
 
-        # If the current version is less than the PSGallery version, update the script
-        if ($CurrentVersion -lt $psGalleryScriptVersion) {
-            Write-Output "Updating script to version $psGalleryScriptVersion..."
+    # get administraor group
+    $admins = New-Object System.Security.Principal.SecurityIdentifier("S-1-5-32-544")
+    $admins = $admins.Translate([System.Security.Principal.NTAccount])
 
-            # Install NuGet PackageProvider if not already installed
-            if (-not (Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue)) {
-                Install-PackageProvider -Name "NuGet" -Force
-            }
+    # add NT Authority\SYSTEM
+    $rule = New-Object System.Security.AccessControl.FileSystemAccessRule($admins, "FullControl", "None", "None", "Allow")
+    $acl.AddAccessRule($rule)
 
-            # Trust the PSGallery if not already trusted
-            $repo = Get-PSRepository -Name 'PSGallery'
-            if ($repo.InstallationPolicy -ne 'Trusted') {
-                Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-            }
+    Set-Acl -Path $path -AclObject $acl
+}
 
-            # Update the script
-            Install-Script $PowerShellGalleryName -Force
-
-            Write-Output "Script updated to version $psGalleryScriptVersion."
-            exit 0
+function Takeown-Folder($path) {
+    Takeown-File $path
+    foreach ($item in Get-ChildItem $path) {
+        if (Test-Path $item -PathType Container) {
+            Takeown-Folder $item.FullName
         } else {
-            Write-Output "Script is already up to date."
-            exit 0
+            Takeown-File $item.FullName
         }
-    } catch {
-        Write-Output "An error occurred: $_"
-        exit 1
     }
 }
 
-function Uninstall-OneDrive {
-    param (
-        [string]$Path
-    )
-    if (Test-Path $Path) {
-        Write-Output "Uninstalling OneDrive found in $Path"
-        $proc = Start-Process $Path "/uninstall" -PassThru
-        $proc.WaitForExit()
-    } else {
-        Write-Output "Path `"$Path`" not found, skipping..."
-    }
-}
-
-function Get-UninstallString {
-    param (
-        [string]$Match
-    )
-    $uninstallPaths = @(
-        'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall',
-        'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall'
-    )
-
-    foreach ($path in $uninstallPaths) {
-        if (Test-Path $path) {
-            $uninstallString = Get-ChildItem -Path $path | 
-            Get-ItemProperty | 
-            Where-Object { $_.DisplayName -like "*$Match*" } |
-            Select-Object -ExpandProperty UninstallString -First 1
-            if ($uninstallString) {
-                return $uninstallString
+function Elevate-Privileges {
+    param($Privilege)
+    $Definition = @"
+    using System;
+    using System.Runtime.InteropServices;
+    public class AdjPriv {
+        [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+            internal static extern bool AdjustTokenPrivileges(IntPtr htok, bool disall, ref TokPriv1Luid newst, int len, IntPtr prev, IntPtr rele);
+        [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+            internal static extern bool OpenProcessToken(IntPtr h, int acc, ref IntPtr phtok);
+        [DllImport("advapi32.dll", SetLastError = true)]
+            internal static extern bool LookupPrivilegeValue(string host, string name, ref long pluid);
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+            internal struct TokPriv1Luid {
+                public int Count;
+                public long Luid;
+                public int Attr;
             }
+        internal const int SE_PRIVILEGE_ENABLED = 0x00000002;
+        internal const int TOKEN_QUERY = 0x00000008;
+        internal const int TOKEN_ADJUST_PRIVILEGES = 0x00000020;
+        public static bool EnablePrivilege(long processHandle, string privilege) {
+            bool retVal;
+            TokPriv1Luid tp;
+            IntPtr hproc = new IntPtr(processHandle);
+            IntPtr htok = IntPtr.Zero;
+            retVal = OpenProcessToken(hproc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, ref htok);
+            tp.Count = 1;
+            tp.Luid = 0;
+            tp.Attr = SE_PRIVILEGE_ENABLED;
+            retVal = LookupPrivilegeValue(null, privilege, ref tp.Luid);
+            retVal = AdjustTokenPrivileges(htok, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero);
+            return retVal;
         }
     }
-    return $null
+"@
+    $ProcessHandle = (Get-Process -id $pid).Handle
+    $type = Add-Type $definition -PassThru
+    $type[0]::EnablePrivilege($processHandle, $Privilege)
 }
 
-try {
-    # First heading
-    Write-Output "UninstallOneDrive $CurrentVersion"
+	echo "73 OneDrive process and explorer"
+	taskkill.exe /F /IM "OneDrive.exe"
+	taskkill.exe /F /IM "explorer.exe"
 
-    # Check for updates if -CheckForUpdate is specified
-    if ($CheckForUpdate) { CheckForUpdate -RepoOwner $RepoOwner -RepoName $RepoName -CurrentVersion $CurrentVersion -PowerShellGalleryName $PowerShellGalleryName }
+	echo "Remove OneDrive"
+	if (Test-Path "$env:systemroot\System32\OneDriveSetup.exe") {
+		& "$env:systemroot\System32\OneDriveSetup.exe" /uninstall
+	}
+	if (Test-Path "$env:systemroot\SysWOW64\OneDriveSetup.exe") {
+		& "$env:systemroot\SysWOW64\OneDriveSetup.exe" /uninstall
+	}
 
-    # Update the script if -UpdateSelf is specified
-    if ($UpdateSelf) { UpdateSelf }
+	echo "Disable OneDrive via Group Policies"
+	force-mkdir "HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\OneDrive"
+	sp "HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\OneDrive" "DisableFileSyncNGSC" 1
 
-    # Heading
-    Write-Output "To check for updates, run winget-install -CheckForUpdate"
+	echo "Removing OneDrive leftovers trash"
+	rm -Recurse -Force -ErrorAction SilentlyContinue "$env:localappdata\Microsoft\OneDrive"
+	rm -Recurse -Force -ErrorAction SilentlyContinue "$env:programdata\Microsoft OneDrive"
+	rm -Recurse -Force -ErrorAction SilentlyContinue "C:\OneDriveTemp"
 
-    $oneDrivePaths = @(
-        "$ENV:SystemRoot\System32\OneDriveSetup.exe",
-        "$ENV:SystemRoot\SysWOW64\OneDriveSetup.exe",
-        "$ENV:ProgramFiles\Microsoft Office\root\Integration\Addons\OneDriveSetup.exe",
-        "${ENV:ProgramFiles(x86)}\Microsoft Office\root\Integration\Addons\OneDriveSetup.exe"
-    )
+	echo "Remove Onedrive from explorer sidebar"
+	New-PSDrive -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" -Name "HKCR"
+	mkdir -Force "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
+	sp "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" "System.IsPinnedToNameSpaceTree" 0
+	mkdir -Force "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
+	sp "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" "System.IsPinnedToNameSpaceTree" 0
+	Remove-PSDrive "HKCR"
 
-    Write-Output "Stopping OneDrive processes..."
-    Stop-Process -Name OneDrive* -Force -ErrorAction SilentlyContinue
+	echo "Removing run option for new users"
+	reg load "hku\Default" "C:\Users\Default\NTUSER.DAT"
+	reg delete "HKEY_USERS\Default\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "OneDriveSetup" /f
+	reg unload "hku\Default"
 
-    # Uninstall from common locations
-    foreach ($path in $oneDrivePaths) {
-        Uninstall-OneDrive -Path $path
-    }
+	echo "Removing startmenu junk entry"
+	rm -Force -ErrorAction SilentlyContinue "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\OneDrive.lnk"
 
-    # Uninstall from Uninstall registry key UninstallString
-    $uninstallString = Get-UninstallString -Match "OneDrive"
-    if ($uninstallString) {
-        Write-Output "Uninstalling OneDrive found in Uninstall registry key..."
-        try {
-            # Remove quotation marks from the uninstall string
-            $uninstallString = $uninstallString.Replace('"', '')
+	echo "Restarting explorer..."
+	start "explorer.exe"
 
-            $exePath = $uninstallString.Substring(0, $uninstallString.IndexOf(".exe") + 4).Trim()
-            $argz = $uninstallString.Substring($uninstallString.IndexOf(".exe") + 5).Trim().replace("  ", " ")
+	echo "Wait for EX reload.."
+	sleep 5
 
-            # Write the path of the executable and the arguments to the console
-            Write-Output "`t`"$exePath`""
-
-            $proc = Start-Process -FilePath $exePath -Args $argz -PassThru
-            $proc.WaitForExit()
-        } catch {
-            Write-Output "Uninstall failed with exception: $($_.Exception.Message)"
-        }
-    } else {
-        Write-Output "No OneDrive uninstall string found in registry, skipping..."
-    }
-
-    # Remove OneDrive scheduled tasks
-    Write-Output "Removing OneDrive scheduled tasks..."
-    Get-ScheduledTask -TaskName "OneDrive*" | Unregister-ScheduledTask -Confirm:$false -ErrorAction SilentlyContinue
-
-    # Output uninstall complete
-    Write-Output "Uninstall complete!"
-} catch {
-    Write-Warning "Uninstall failed with exception: $($_.Exception.Message)"
-    exit 1
-}
+	echo "Removing additional OneDrive leftovers"
+	foreach ($item in (ls "$env:WinDir\WinSxS\*onedrive*")) {
+		Takeown-Folder $item.FullName
+		rm -Recurse -Force $item.FullName
+	}
+ 
