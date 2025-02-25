@@ -53,5 +53,3 @@ function Remove-OneDrive() {
     Write-Host "Waiting for explorer to complete loading..."
     Start-Sleep 5
 }
-
-Remove-OneDrive
