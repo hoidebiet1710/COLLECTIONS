@@ -50,10 +50,3 @@ Start-Process "explorer.exe"
 
 Write-Output "Waiting for explorer to complete loading"
 Start-Sleep 10
-
-# This can break Windows Update and some system utilities, see #297.
-#Write-Output "Removing additional OneDrive leftovers"
-#foreach ($item in (Get-ChildItem "$env:WinDir\WinSxS\*onedrive*")) {
-#    Takeown-Folder $item.FullName
-#    Remove-Item -Recurse -Force $item.FullName
-#}
