@@ -1,7 +1,7 @@
-### This script will remove and disable OneDrive integration. ###
-### Author of this script: https://github.com/W4RH4WK/Debloat-Windows-10
+#   Description:
+# This script will remove and disable OneDrive integration.
 
-Import-Module -DisableNameChecking $PSScriptRoot\..\lib\force-mkdir.psm1
+Import-Module -DisableNameChecking $PSScriptRoot\..\lib\New-FolderForced.psm1
 Import-Module -DisableNameChecking $PSScriptRoot\..\lib\take-own.psm1
 
 Write-Output "Kill OneDrive process"
@@ -16,6 +16,38 @@ if (Test-Path "$env:systemroot\SysWOW64\OneDriveSetup.exe") {
     & "$env:systemroot\SysWOW64\OneDriveSetup.exe" /uninstall
 }
 
+# Set registry values back to normal directories
+Write-Output "Resetting Registry values for user directories"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" "Desktop" "%USERPROFILE%\Desktop"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" "Favorites" "%USERPROFILE%\Favorites"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" "Personal" "%USERPROFILE%\Documents"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" "My Music" "%USERPROFILE%\Music"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" "My Pictures" "%USERPROFILE%\Pictures"
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" "My Video" "%USERPROFILE%\Videos"
+
+# Copy data from onedrive to normal directories
+Write-Output "Move data back to normal user directories"
+Get-ChildItem -Path $env:userprofile\OneDrive\Desktop | Move-Item -Destination $env:userprofile\Desktop
+Remove-Item -Path $env:userprofile\OneDrive\Desktop -Recurse
+
+Get-ChildItem -Path $env:userprofile\OneDrive\Documents | Move-Item -Destination $env:userprofile\Documents
+Remove-Item -Path $env:userprofile\OneDrive\Documents -Recurse
+
+Get-ChildItem -Path $env:userprofile\OneDrive\Favorites | Move-Item -Destination $env:userprofile\Favorites
+Remove-Item -Path $env:userprofile\OneDrive\Favorites -Recurse
+
+Get-ChildItem -Path $env:userprofile\OneDrive\Music | Move-Item -Destination $env:userprofile\Music
+Remove-Item -Path $env:userprofile\OneDrive\Music -Recurse
+
+Get-ChildItem -Path $env:userprofile\OneDrive\Pictures | Move-Item -Destination $env:userprofile\Pictures
+Remove-Item -Path $env:userprofile\OneDrive\Pictures -Recurse
+
+Get-ChildItem -Path $env:userprofile\OneDrive\Videos | Move-Item -Destination $env:userprofile\Videos
+Remove-Item -Path $env:userprofile\OneDrive\Videos -Recurse
+
+Remove-Item -Path $env:userprofile\OneDrive -Recurse
+
+# Remove leftovers
 Write-Output "Removing OneDrive leftovers"
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$env:localappdata\Microsoft\OneDrive"
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$env:programdata\Microsoft OneDrive"
@@ -26,15 +58,15 @@ If ((Get-ChildItem "$env:userprofile\OneDrive" -Recurse | Measure-Object).Count 
 }
 
 Write-Output "Disable OneDrive via Group Policies"
-force-mkdir "HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\OneDrive"
-Set-ItemProperty "HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\OneDrive" "DisableFileSyncNGSC" 1
+New-FolderForced -Path "HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\OneDrive"
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\OneDrive" "DisableFileSyncNGSC" 1
 
 Write-Output "Remove Onedrive from explorer sidebar"
 New-PSDrive -PSProvider "Registry" -Root "HKEY_CLASSES_ROOT" -Name "HKCR"
 mkdir -Force "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-Set-ItemProperty "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" "System.IsPinnedToNameSpaceTree" 0
+Set-ItemProperty -Path "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" "System.IsPinnedToNameSpaceTree" 0
 mkdir -Force "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-Set-ItemProperty "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" "System.IsPinnedToNameSpaceTree" 0
+Set-ItemProperty -Path "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" "System.IsPinnedToNameSpaceTree" 0
 Remove-PSDrive "HKCR"
 
 # Thank you Matthew Israelsson
@@ -55,8 +87,9 @@ Start-Process "explorer.exe"
 Write-Output "Waiting for explorer to complete loading"
 Start-Sleep 10
 
-Write-Output "Removing additional OneDrive leftovers"
-foreach ($item in (Get-ChildItem "$env:WinDir\WinSxS\*onedrive*")) {
-    Takeown-Folder $item.FullName
-    Remove-Item -Recurse -Force $item.FullName
-}
+# This can break Windows Update and some system utilities, see #297.
+#Write-Output "Removing additional OneDrive leftovers"
+#foreach ($item in (Get-ChildItem "$env:WinDir\WinSxS\*onedrive*")) {
+#    Takeown-Folder $item.FullName
+#    Remove-Item -Recurse -Force $item.FullName
+#}
