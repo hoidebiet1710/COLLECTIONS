@@ -1,3 +1,6 @@
+#   Description:
+# This script will remove Xbox integration.
+
 function Remove-Xbox() {
     $PathToLMServicesXbgm = "HKLM:\SYSTEM\CurrentControlSet\Services\xbgm"
     $TweakType = "Xbox"
