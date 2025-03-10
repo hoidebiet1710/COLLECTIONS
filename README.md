@@ -15,8 +15,8 @@ Download / How to use it?
 Mở powershell bằng quyền Quản trị, copy và dán lệnh sau: irm https://get.activated.win | iex
 Hoặc sử dụng batch file với câu lệnh 
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((irm https://get.activated.win))) | iex
-6. Downloads setup.exe from https://officecdn.microsoft.com/pr/wsus/setup.exe
-7. Chạy File*.ps1 bằng quyền quản trị (administrator),
+7. Downloads setup.exe from https://officecdn.microsoft.com/pr/wsus/setup.exe
+8. Chạy File*.ps1 bằng quyền quản trị (administrator),
 @echo off & color 1f
 cd /d "%~dp0"
 :: Lấy đường dẫn tuyệt đối đến file PS1
