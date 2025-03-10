@@ -11,30 +11,16 @@ https://github.com/abbodi1406/BatUtil
 https://github.com/arcadesdude
 5. Microsoft Activation Scripts (MAS)
 Windows and Office activator featuring HWID, Ohook, KMS38, and Online KMS activation methods, along with advanced troubleshooting
-
 Download / How to use it?
-
 Mở powershell bằng quyền Quản trị, copy và dán lệnh sau: irm https://get.activated.win | iex
-
-Hoặc sử dụng batch file với câu lệnh PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((irm https://get.activated.win))) | iex
-
-Choose (1) HWID for Windows activation. Choose (2) Ohook for Office activation.
-
+Hoặc sử dụng batch file với câu lệnh 
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((irm https://get.activated.win))) | iex
 6. Downloads setup.exe from https://officecdn.microsoft.com/pr/wsus/setup.exe
-
 7. Chạy File*.ps1 bằng quyền quản trị (administrator),
 @echo off & color 1f
-
 cd /d "%~dp0"
-
 :: Lấy đường dẫn tuyệt đối đến file PS1
-
 set "ps1_file=%~dp0
-
 :: Chạy file PS1 bằng quyền quản trị thông qua PowerShell
-
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process powershell -Verb runAs -ArgumentList '-NoExit', '-File', 'Disable-Defender.ps1'"
-
-echo Đã hoàn thành.
-
-timeout 2>nul & Exit/b
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process powershell -Verb runAs -ArgumentList '-NoExit', '-File', 'File*.ps1'"
+pause 2>nul & Exit/b
