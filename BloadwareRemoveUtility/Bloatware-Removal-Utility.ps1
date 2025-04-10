@@ -653,7 +653,7 @@ if ( !($Global:isSilent) ) {
     $helpAboutMenu.Text = "&About"
     $helpAboutMenu.TextAlign = "MiddleLeft"
     function showHelpAboutMenu($Sender,$e){
-        [void][System.Windows.Forms.MessageBox]::Show("Bloatware Removal Utility by Ricky Cobb (c) 2021.`n`nIntended use for removing bloatware from new`nfactory image systems.`n`nCarefully check the selection list before`nremoving any selected programs.`n`nUse at your own risk!`n`nhttp://github.com/arcadesdude/BRU","About Bloatware Removal Utility (BRU)")
+        [void][System.Windows.Forms.MessageBox]::Show("Bloatware Removal Utility by Ricky Cobb (c) $((Get-Date).Year).`n`nIntended use for removing bloatware from new`nfactory image systems.`n`nCarefully check the selection list before`nremoving any selected programs.`n`nUse at your own risk!`n`nhttp://github.com/arcadesdude/BRU","About Bloatware Removal Utility (BRU)")
     }
     $helpMenu.DropDownItems.Add($helpAboutMenu) | Out-Null
     $helpAboutMenu.Add_Click( { showHelpAboutMenu $helpAboutMenu $EventArgs} )
@@ -984,11 +984,19 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
             } # end if ( $Script:progslisttoremove -match "Microsoft Office" )
 
             if ( $Script:progslisttoremove -match "McAfee" ) {
-                if ( Test-Path "$($scriptPath)\BRU-uninstall-helpers\mcpr.exe" ) { # updated for mcpr version 10.2.248.0, be sure to update your helpers!
-                    Copy-Item -Verbose -Path "$($scriptPath)\BRU-uninstall-helpers\mcpr.exe" -Destination $Script:dest
+                if ( Test-Path "$($scriptPath)\BRU-uninstall-helpers\MCPR-10-5-374-0.exe" ) { # Version 10.5.374.0 works with mcclean version 10.5.128.0 which works silently be sure to provide both
+                    Copy-Item -Verbose -Path "$($scriptPath)\BRU-uninstall-helpers\MCPR-10-5-374-0.exe" -Destination $Script:dest
                 } else {
-                    Write-Warning "McAfee uninstall helper MCPR.exe (McAfee Consumer Product Removal Tool) not found in $($scriptPath)\BRU-uninstall-helpers\"  | Out-Default
-                    Write-Warning "See: http://us.mcafee.com/apps/supporttools/mcpr/mcpr.asp" | Out-Default
+                    Write-Warning "McAfee uninstall helper MCPR-10-5-374-0.exe (McAfee Consumer Product Removal Tool) not found in $($scriptPath)\BRU-uninstall-helpers\"  | Out-Default
+                    #Write-Warning "See: http://us.mcafee.com/apps/supporttools/mcpr/mcpr.asp" | Out-Default
+                    Write-Warning "See: https://mcprtool.com/ (https://download.mcafee.com/molbin/iss-loc/SupportTools/MCPR/mcpr.exe)" | Out-Default
+                }
+                if ( Test-Path "$($scriptPath)\BRU-uninstall-helpers\mccleanup-10-5-128-0.exe" ) {
+                    Copy-Item -Verbose -Path "$($scriptPath)\BRU-uninstall-helpers\mccleanup-10-5-128-0.exe" -Destination $Script:dest
+                } else {
+                    Write-Warning "McAfee uninstall helper mcclean.exe (mcclean version 10.5.128.0, part of McAfee Consumer Product Removal Tool) not found in $($scriptPath)\BRU-uninstall-helpers\"  | Out-Default
+                    #Write-Warning "See: http://us.mcafee.com/apps/supporttools/mcpr/mcpr.asp" | Out-Default
+                    Write-Warning "See: https://mcprtool.com/ (https://download.mcafee.com/molbin/iss-loc/SupportTools/MCPR/mcpr.exe)" | Out-Default
                 }
             } # end if ( $Script:progslisttoremove -match "McAfee" )
 
@@ -1204,7 +1212,7 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
                             $uninstallarguments = "-uninstall"
                         }
 
-                        if ( $prog.Name -match "Dell Optimizer Service" ) {
+                        if (( $prog.Name -match "Dell Optimizer Service|Dell Optimizer Core|Dell Optimizer|Dell Precision Optimizer" )) {
                             $uninstallarguments = "-silent"+" "+$uninstallarguments
                         }
 
@@ -1393,7 +1401,8 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
                                     -and $prog.Name -match "CyberLink\ Media.*Suite")) `
                             -and ( $prog.Name -notmatch "HP\ Collaboration\ Keyboard" ) `
                             -and ( $prog.Name -notmatch "HP\ Connection\ Optimizer" ) `
-                            -and ( $prog.Name -notmatch "Dell\ Optimizer\ Service" ) `
+                            -and ( $prog.Name -notmatch "Dell\ Optimizer\ Service|Dell\ Optimizer|Dell\ Precision\ Optimizer" ) `
+                            -and ( $prog.Name -notmatch "MyDell" ) `
                             ) {
                                 $uninstallarguments = "/S"+" "+$uninstallarguments
                         }
@@ -1442,22 +1451,71 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
                             $functionAfterUninstallerStarted = "LenovoAppExplorerAfterUninstallerStarted"
                         }
 
-                        if ( $prog.Name -match "McAfee" ) {
+                        if ( $prog.Name -match "McAfee Security Scan Plus" ) {
+                            $uninstallarguments = "/S /inner"
+                        }
+
+                        if ( $prog.Name -match "McAfee" -and $prog.Name -notmatch "McAfee Security Scan Plus" ) {
+
                             if ( $MCPRalreadyran ) {
                                 Write-Output "$($prog.Name) has already been removed." | Out-Default
                                 Continue # skip if already ran it for a previous McAfee product
                             }
                             # Remove all McAfee consumer products
                             $MCPRalreadyran = 1
-                            if ( Test-Path "$($Script:dest)\mcpr.exe" ) {
-                                Start-Process "$($Script:dest)\mcpr.exe" # Starting it will extract its contents to a temporary folder
+                            if ( (Test-Path "$($Script:dest)\MCPR-10-5-374-0.exe") -and (Test-Path "$($Script:dest)\mccleanup-10-5-128-0.exe")) {
+
+                                Start-Process "$($Script:dest)\MCPR-10-5-374-0.exe" # Starting it will extract its contents to a temporary folder
                                 $waittimeoutexitcode = waitForProcessToStartOrTimeout "McClnUI" 45
+
+                                $mcprDir = $null
+                                $mcprProcessPath = (Get-Process mcclnui -ErrorAction SilentlyContinue | Select-Object Path).Path
+                                if ($mcprProcessPath) {
+                                    $mcprDir = Split-Path $mcprProcessPath
+                                }
+                                if ($mcprDir) {
+                                    if (!(Test-Path "$($mcprDir)")) {
+                                        $mcprDir = $null
+                                    }
+                                }
+                                if (!($mcprDir)) {
+                                    $recentTempDirs = Get-ChildItem "$($env:temp)" | Where-Object { $_.PSIsContainer -and $_.LastWriteTime -gt (Get-Date).AddHours(-1) }
+                                    $mcprTempDirs = (Get-ChildItem -Recurse $recentTempDirs.FullName -Filter "McClnUI.exe").FullName
+                                    if ($mcprTempDirs) {
+                                        $mcprDirs = Split-Path $mcprTempDirs
+                                    }
+                                    if ($mcprDirs) {
+                                        $mcprDir = ($mcprDirs | Get-Item | Sort-Object LastWriteTime | Select-Object -Last 1).FullName
+                                    }
+                                }
+                                Start-Sleep -Seconds 10
                                 Start-Process "taskkill.exe" -ArgumentList "/im `"McClnUI.exe`" /f"
-                                if ( Test-Path "$($env:temp)\MCPR" ) {
-                                    Set-Location "$($env:temp)\MCPR"
-                                    if ( Test-Path "$($env:temp)\MCPR\mccleanup.exe" ) {
-                                        $uninstallpath = "$($env:temp)\MCPR\mccleanup.exe"
-                                        $uninstallarguments = "-silent -p StopServices,MFSY,PEF,MXD,CSP,Sustainability,MOCP,MFP,APPSTATS,Auth,EMproxy,FWdiver,HW,MAS,MAT,MBK,MCPR,McProxy,McSvcHost,VUL,MHN,MNA,MOBK,MPFP,MPFPCU,MPS,SHRED,MPSCU,MQC,MQCCU,MSAD,MSHR,MSK,MSKCU,MWL,NMC,RedirSvc,VS,REMEDIATION,MSC,YAP,TRUEKEY,LAM,RESIDUE"
+                                if ( Test-Path "$mcprDir" ) {
+                                    Set-Location "$mcprDir"
+                                    if ( Test-Path "$($mcprDir)\mccleanup.exe" ) {
+                                        $uninstallpath = "$($mcprDir)\mccleanup.exe"
+                                        Rename-Item -Path "$($mcprDir)\mccleanup.exe" -NewName "mccleanup.exe.new" -Force
+                                        #copy old one 10.5.128.0
+                                        Copy-Item -Path "$($Script:dest)\mccleanup-10-5-128-0.exe" -Destination "$($mcprDir)" -Force
+                                        if ( Test-Path "$($Script:dest)\mccleanup-10-5-128-0.exe" ) {
+                                            Rename-Item -Path "$($Script:dest)\mccleanup-10-5-128-0.exe" -NewName "mccleanup.exe" -Force
+                                        }
+
+                                        #read version from file
+                                        $mcprVersion = (Get-Item "$uninstallpath" | Select-Object VersionInfo).VersionInfo.ProductVersion
+
+                                        $mcprKeys = @{ # key needed to run silently
+                                            "10.5.128.0" = "83D598B28704805D599AE0512AB8066E31DCE48D6BD9691F304FD895B191EECBCD86900CFF18E603CFFE8D7C27F362E53B70ACFDA1D37F101A7CFB3856D2D8825AAEE68DAF7C988D46EDC54D2D26ECC333F6BA0D7D22873D45ECEFA2BB9FC87DC244F5B791222430B708DF22895F8AC3145986F07477A545A0E80A5556B372E7DEB7CD959C715F65034C68D657F62A9206582AB1244FA8AAA6917BEAD2E85F18D66F3A66FF4282EFA57AD3A594E18060C0A2025D9EA8B1D9877CE83C7BEC08C05486C99308FF967895F3324D082669D00BBDFE004B9D4243580A0C7103664DF768D10E6BCC479553D3159E4DD51BC81418368B3C790155552AE8817015FE2DEF9C77ABFF09AC18A9CD0F01D7871B9CA9D2D15B6F047CB043A9B201F730BA20B70AD88344AFE9E03151C5C700B9E1C1C4";
+                                            "10.4.194.0" = "83D598B28704805D599AE0512AB8066E31DCE48D6BD9691F304FD895B191EECBCD86900CFF18E603CFFE8D7C27F362E53B70ACFDA1D37F101A7CFB3856D2D882BC9078509FAA05370EA70FA186EC44AE3A657B43EC9559FDEF33C6E8AAF0D7BDB71F264D419E66EBCA2045AF9717434E8A4AAE1FA6F7F2A6EE6EE4F37FA199298DDAFF1F1E3124F4837EAA344CA44ADC129C0C9A1C112CA77050705A304AA3428E264FF96942728C839D4B675753DCFED36D95CF1E5FA3F0F8DFA7C5FEF32C481D8160BA8A96CE44BDC1E3B3F3B198456633E83E467775AD0BBF0E8FC09C94150F1F2FE79E13247DD89EF520425269A557765E64EE0F73208A078FCAE244F317CCE7006FBFCB354401D044FF08FBF800477F0BB5415682DE406DF0BADF6624761F76E0EFAB9543BBB924149A64B9BB4A";
+
+                                        }
+
+                                        if ($mcprVersion) {
+                                            $mcprKey = $mcprKeys[$mcprVersion]
+                                        }
+
+
+                                        $uninstallarguments = "-p $mcprKey -silent StopServices,MFSY,PEF,MXD,CSP,Sustainability,MOCP,MFP,APPSTATS,Auth,EMproxy,FWdiver,HW,MAS,MAT,MBK,MCPR,McProxy,McSvcHost,VUL,MHN,MNA,MOBK,MPFP,MPFPCU,MPS,SHRED,MPSCU,MQC,MQCCU,MSAD,MSHR,MSK,MSKCU,MWL,NMC,RedirSvc,VS,REMEDIATION,MSC,YAP,TRUEKEY,LAM,PCB,Symlink,SafeConnect,MGS,WMIRemover,RESIDUE"
                                         Write-Output "MCPR may take quite a while to run. Please wait..." | Out-Default
                                         #unpin McAfee LiveSafe from taskbar
                                         function UnPinFromTaskbar { param( [string]$appname )
@@ -1472,13 +1530,14 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
                                         UnPinFromTaskbar 'McAfee LiveSafe'
                                         function functionMcAfeeAfterUninstallerStarted {
                                             Set-Location $Script:dest
-                                            Remove-Item "$($env:temp)\MCPR" -Force -Recurse -ErrorAction SilentlyContinue
-                                            Remove-Item "$($Script:dest)\MCPR.exe" -Force -ErrorAction SilentlyContinue
+                                            Remove-Item "$mcprDir" -Force -Recurse -ErrorAction SilentlyContinue
+                                            Remove-Item "$($Script:dest)\MCPR-10-5-374-0.exe" -Force -ErrorAction SilentlyContinue
+                                            Remove-Item "$($Script:dest)\mccleanup-10-5-128-0.exe" -Force -ErrorAction SilentlyContinue
                                         }
                                         $functionAfterUninstallerStarted = "functionMcAfeeAfterUninstallerStarted"
                                     }
                                 } else {
-                                    Write-Warning "Directory $($env:temp)\MCPR does not exist." | Out-Default
+                                    Write-Warning "No directory in $($env:temp) found with McClnUI.exe." | Out-Default
                                     Write-Warning "Probably low disk space." | Out-Default
                                     Write-Warning "Try clearing room, check write permissions and then manually uninstall $($prog.Name) or run MCPR.exe and reboot." | Out-Default
                                     Continue
@@ -1486,7 +1545,8 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
                             } else {
                                 Write-Warning "McAfee uninstall helper MCPR.exe (McAfee Consumer Product Removal Tool) not found in $($Script:dest)\"  | Out-Default
                                 Write-Warning "MCPR will remove all McAfee consumer products and likely $($prog.Name)." | Out-Default
-                                Write-Warning "Download from McAfee: http://us.mcafee.com/apps/supporttools/mcpr/mcpr.asp" | Out-Default
+                                #Write-Warning "Download from McAfee: http://us.mcafee.com/apps/supporttools/mcpr/mcpr.asp" | Out-Default
+                                Write-Warning "Download from McAfee: https://mcprtool.com (https://download.mcafee.com/molbin/iss-loc/SupportTools/MCPR/mcpr.exe)" | Out-Default
                                 Continue
                             }
                         } # end if ( $prog.Name -match "McAfee" )
@@ -1514,6 +1574,12 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
                             stopProcesses( $procnamelist )
                             $uninstallarguments = "/x /s /u"
                         }
+
+
+                        if (( $prog.Name -match "MyDell" )) {
+                            $uninstallarguments = "-silent"+" "+$uninstallarguments
+                        }
+
 
                         if ( $prog.Name -like "NewBlue Video Essentials" ) {
                         # Bundled with CyberLink Media Suite Essentials
@@ -1652,7 +1718,8 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
             Write-Output "Removing uninstall helpers that were copied to $($Script:dest)\ ..." | Out-Default
             Remove-Item "$Script:dest\OffScrubc2r.vbs" -Force -Verbose -ErrorAction SilentlyContinue
             Remove-Item "$Script:dest\devcon_x$($Script:osArch).exe" -Force -Verbose -ErrorAction SilentlyContinue
-            Remove-Item "$Script:dest\mcpr.exe" -Force -Verbose -ErrorAction SilentlyContinue
+            Remove-Item "$Script:dest\MCPR-10-5-374-0.exe" -Force -Verbose -ErrorAction SilentlyContinue
+            Remove-Item "$Script:dest\mccleanup-10-5-128-0.exe" -Force -Verbose -ErrorAction SilentlyContinue
             Remove-Item "$Script:dest\WASP.dll" -Force -Verbose -ErrorAction SilentlyContinue
             $ErrorActionPreference = "Continue"
 
@@ -1675,28 +1742,18 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
 
                 ForEach ($removeitem in $Global:UWPappsAUtoRemove) {
 
-                    Write-Output "`nRemoving $($removeitem.Name)`nPackageFullName: $($removeitem.PackageFullName)" | Out-Default
-                    $EAPSaved = $ErrorActionPreference
-                    $ErrorActionPreference = "Stop"
-                    try {
-                        $ErrorActionPreference = "Stop"
-                        [void]$(Remove-AppxPackage -AllUsers -Package "$($removeitem.PackageFullName)")
-                    } catch {
-                        $ErrorActionPreference = "Stop"
-                        # run it again, some OS bug means that it sometimes fails the first time (thanks for the Tip Lenovo!)
+                    if (Get-AppxPackage -AllUsers | Where {$_.PackageFullName -eq "$($removeitem.PackageFullName)"}) {
+                        Write-Output "`nRemoving $($removeitem.Name)`nPackageFullName: $($removeitem.PackageFullName)" | Out-Default
                         try {
-                            $ErrorActionPreference = "Stop"
-                            [void]$(Remove-AppxPackage -AllUsers -Package "$($removeitem.PackageFullName)")
+                            [void]$(Remove-AppxPackage -Allusers -Package "$($removeitem.PackageFullName)" -ErrorAction Ignore)
                         } catch {
-                            $ErrorActionPreference = "Stop"
                             try {
-                                $ErrorActionPreference = "Stop"
-                                [void]$(Remove-AppxPackage -Package "$($removeitem.PackageFullName)")
+                                [void]$(Remove-AppxPackage -Package "$($removeitem.PackageFullName)" -ErrorAction Ignore)
                             } catch {
                             }
                         }
                     }
-                    $ErrorActionPreference = $EAPSaved
+
                     Start-Sleep -Seconds 4
                     Write-Output "Unpinning from Start Menu" | Out-Default
                     $unpinName = $removeitem.Name
@@ -1704,7 +1761,7 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
                         $currentLivetile = ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where {$_.Path -match $unpinName})
                         if ( $currentLivetile ) {
                             try {
-                                $ErrorActionPreference = "Stop"
+                                $ErrorActionPreference = "Ignore"
                                 $currentLivetile.Verbs() | Where { $_.Name.replace('&','') -match 'Unpin from Start' } | % { $_.DoIt() }
                                 $ErrorActionPreference = SilentlyContinue
                             } catch {
@@ -1727,27 +1784,17 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
 
                 ForEach ($removeProvisioneditem in $Global:UWPappsProvisionedAppstoRemove)  {
 
-                    Write-Output "`nRemoving $($removeProvisioneditem.DisplayName)`nPackageName: $($removeProvisioneditem.PackageName)" | Out-Default
-                    $EAPSaved = $ErrorActionPreference
-                    $ErrorActionPreference = "Stop"
-                    try {
-                        $ErrorActionPreference = "Stop"
-                        [void]$(Remove-AppxProvisionedPackage -PackageName "$($removeProvisioneditem.PackageName)" -Online -Allusers)
-                    } catch {
-                        $ErrorActionPreference = "Stop"
+                    if (Get-AppxProvisionedPackage -Online | Where {$_.PackageName -eq "$($removeProvisioneditem.PackageName)"}) {
+                        Write-Output "`nRemoving $($removeProvisioneditem.DisplayName)`nPackageName: $($removeProvisioneditem.PackageName)" | Out-Default
                         try {
-                            $ErrorActionPreference = "Stop"
-                            [void]$(Remove-AppxProvisionedPackage -PackageName "$($removeProvisioneditem.PackageName)" -Online -Allusers)
+                            [void]$(Remove-AppxProvisionedPackage -PackageName "$($removeProvisioneditem.PackageName)" -Online -Allusers -ErrorAction Ignore)
                         } catch {
-                            $ErrorActionPreference = "Stop"
                             try {
-                                $ErrorActionPreference = "Stop"
-                                [void]$(Remove-AppxProvisionedPackage -PackageName "$($removeProvisioneditem.PackageName)" -Online)
+                                [void]$(Remove-AppxProvisionedPackage -PackageName "$($removeProvisioneditem.PackageName)" -Online -ErrorAction Ignore)
                             } catch {
                             }
                         }
                     }
-                    $ErrorActionPreference = $EAPSaved
                     Start-Sleep -Seconds 4
                     Write-Output "Unpinning from Start Menu" | Out-Default
                     $unpinName = $removeProvisioneditem.DisplayName
@@ -1755,7 +1802,7 @@ if ( ($button -ne "Cancel") -or ($Global:isSilent) ) {
                         $currentLivetile = ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | Where { $_.Path -match $unpinName })
                         if ( $currentLivetile ) {
                             try {
-                                $ErrorActionPreference = "Stop"
+                                $ErrorActionPreference = "Ignore"
                                 $currentLivetile.Verbs() | Where { $_.Name.replace('&','') -match 'Unpin from Start' } | % { $_.DoIt() }
                                 $ErrorActionPreference = SilentlyContinue
                             } catch {
@@ -2016,6 +2063,7 @@ BEGIN {
         # must be regex escaped here (and powershell escaped if needed)
         "ActivClient.*",
         "Adobe\ AIR",
+        "Ai\ Meeting\ Manager\ Service",
         "^ASUS\ .*",
         "Bing\ Bar",
         "Corel\ .*",
@@ -2023,11 +2071,12 @@ BEGIN {
         "^Cyberlink.*",
         "^Power2Go",
         "^PowerDVD",
-        "^Dell\ .*",
+        "^Dell.*",
         "Dropbox.*",
         "DVD\ Architect\ Studio.*",
         "Evernote.*",
         "Google\ Toolbar.*",
+        "^HP\ Sure\ Run.*",
         "^HP\ .*",
         "HPInc.EnergyStar",
         "HPPrinterControl",
@@ -2061,7 +2110,7 @@ BEGIN {
         "VAIO\ .*",
         "Windows\ Live\ .*",
         "WinZip.*",
-        # Windows 8/10+ UWP apps ######################################################################################
+        # Windows 8/10/11+ UWP apps ######################################################################################
         "3DBuilder",
         "ACGMediaPlayer",
         "ActiproSoftware",
@@ -2084,6 +2133,7 @@ BEGIN {
         "CyberLinkMediaSuiteEssentials",
         "DellCustomerConnect",
         "DellHelpSupport",
+        "DellInc\.DellSupportAssistforPCs",
         "DellProductRegistration",
         "DiscoverHPTouchpointManager",
         "DisneyMagicKingdoms",
@@ -2211,7 +2261,8 @@ BEGIN {
         # special cases below will be removed later after the matching list above are removed first
         # VERY IMPORTANT, the order in which these are listed is important as they'll be removed in that order. Some programs need to be removed before others. Matches any part of the string. Will be regex escaped later.
         "CyberLink Media Suite",
-        #"Dell Precision Optimizer", # Need to create iss file for this possibly or try -silent instead of /S switch
+        "Dell Optimizer",
+        "Dell Precision Optimizer", # Need to create iss file for this possibly or try -silent instead of /S switch
         "Dell SupportAssist",
         "Dell Data Vault",
         "HP Setup",
@@ -2221,6 +2272,7 @@ BEGIN {
         "HPWorkWise64",
         "HP WorkWise64",
         "HP WorkWise",
+        "MyDell",
         "Theft Recovery for HP ProtectTools",
         "ProtectTools Security Manager",
         "HP Client Security Manager",
@@ -2679,6 +2731,8 @@ BEGIN {
         Write-Host "" | Out-Default
         Write-Verbose -Verbose "Setting default Start Menu tiles layout for new users only (doesn't apply to any current user or existing account)."
         Set-Content -Path "$($Script:dest)\exported-startlayout-noCDMads.xml" -Value $noCDMadsstartlayout
+
+        mkdir "$env:LOCALAPPDATA\Microsoft\Windows\Shell" -Force | Out-Null
         Import-StartLayout -LayoutPath "$($Script:dest)\exported-startlayout-noCDMads.xml" -MountPath "$($env:SystemDrive)\"
 
         Remove-Item "$($Script:dest)\exported-startlayout.xml" -Force -ErrorAction SilentlyContinue
