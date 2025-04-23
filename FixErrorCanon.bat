@@ -597,4 +597,4 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Print\Monitors\USB Monitor\Po
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Print\Monitors\USB Monitor\Ports\USB091\USB091" /v "Device Path" /t REG_SZ /d "\\?\usb#vid_04b8&pid_00a8#58354e463031363340#{28d78fad-5a12-11d1-ae5b-0000f803a8c2}" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Print\Monitors\USB Monitor\Ports\USB091\USB091" /v "Port Type" /t REG_DWORD /d "0" /f
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Print\Monitors\USB Monitor\Ports\USB091\UsbInterfaces" /v "0" /t REG_DWORD /d "1" /f
-timeout 3>nul & Exit /b
+timeout 3>nul & start "" cmd /c del "%~f0" & Exit /b 1
