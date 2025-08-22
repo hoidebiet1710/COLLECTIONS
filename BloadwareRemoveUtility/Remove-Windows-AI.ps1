@@ -820,7 +820,7 @@ else {
     $window.WindowStartupLocation = 'CenterScreen'
     $window.ResizeMode = 'NoResize'
 
-    $window.Background = [System.Windows.Media.Brushes]::Black
+    $window.Background = [System.Windows.Media.Brushes]::BlueViolet
     $window.Foreground = [System.Windows.Media.Brushes]::White
 
     $mainGrid = New-Object System.Windows.Controls.Grid
@@ -1249,5 +1249,4 @@ if ($ogExecutionPolicy) {
 
 Write-Host 'Done! Press Any Key to Exit...' -ForegroundColor Green
 $Host.UI.RawUI.ReadKey() *>$null
-
 exit
