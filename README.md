@@ -16,11 +16,3 @@ Mở powershell bằng quyền Quản trị, copy và dán lệnh sau: irm https
 Hoặc sử dụng batch file với câu lệnh 
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((irm https://get.activated.win))) | iex
 7. Downloads setup.exe from https://officecdn.microsoft.com/pr/wsus/setup.exe
-8. Chạy File*.ps1 bằng quyền quản trị (administrator),
-@echo off & color 1f
-cd /d "%~dp0"
-:: Lấy đường dẫn tuyệt đối đến file PS1
-set "ps1_file=%~dp0
-:: Chạy file PS1 bằng quyền quản trị thông qua PowerShell
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process powershell -Verb runAs -ArgumentList '-NoExit', '-File', 'File*.ps1'"
-pause 2>nul & Exit/b
