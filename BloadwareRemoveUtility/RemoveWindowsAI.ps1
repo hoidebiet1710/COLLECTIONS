@@ -118,7 +118,7 @@ function Write-Status {
 #setup script
 #=====================================================================================
 
-Write-Host '~ ~ ~ Remove Windows AI by @zoicware ~ ~ ~' -ForegroundColor DarkCyan
+Write-Host '~ ~ ~ Remove Windows AI ~ ~ ~' -ForegroundColor DarkCyan
 
 #get powershell version to ensure run-trusted doesnt enter an infinite loop
 $version = $PSVersionTable.PSVersion
