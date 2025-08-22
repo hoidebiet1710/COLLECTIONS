@@ -22,7 +22,7 @@ function Run-Trusted([String]$command) {
 
 }
 
-Write-Host '---Remove Windows AI by @zoicware---'
+Write-Host '---Remove Windows AI---'
 
 #disable ai registry keys
 Write-Host 'Applying Registry Keys...'
