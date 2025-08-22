@@ -814,7 +814,7 @@ else {
     }
 
     $window = New-Object System.Windows.Window
-    $window.Title = 'Remove Windows AI - by @zoicware'
+    $window.Title = 'Remove Windows AI'
     $window.Width = 600
     $window.Height = 700
     $window.WindowStartupLocation = 'CenterScreen'
@@ -1249,4 +1249,5 @@ if ($ogExecutionPolicy) {
 
 Write-Host 'Done! Press Any Key to Exit...' -ForegroundColor Green
 $Host.UI.RawUI.ReadKey() *>$null
+
 exit
