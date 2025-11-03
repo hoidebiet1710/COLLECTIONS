@@ -1,0 +1,6 @@
+Copy dll to program folder, reg with key:
+
+Registration Name: Jose Bottini
+Registration Code: N8BN-L39D-WJLQ-F6GP
+
+Block app in Firewall.
