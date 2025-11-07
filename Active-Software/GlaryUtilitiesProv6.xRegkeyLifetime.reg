@@ -1,0 +1,30 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Glarysoft\Glary Utilities\Settings]
+"AutoLoad"=dword:00000000
+"Auto1ClickCare"=dword:00000000
+"AutoSoftupdate"=dword:00000000
+"Checkupdates"=dword:00000000
+"HelpPlan"=dword:00000000
+"Minitotray"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Glarysoft\Glary Utilities]
+"AU:astRunDate"="45356.468391"
+"AURunType"=dword:000000001
+"AUTimeSpan"=dword:000000001
+"Date"="45356.4648148148"
+"RegCode"="7I5ODC-2A7WRQ-UUDX5G-RNG9IS-VC9VTS"
+"RegName"="Cyber676"
+"NewVersionDate"="45356.463426"
+"ProductID"=dword:000000001
+"ProductStatue"=dword:000000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Glarysoft\Glary Utilities\RegisterInfo]
+"AccountStatue"="EGt4ihxRByVtHPPzbWmKEY2yE4eF+fF+B42isbala2o="
+"ExpireSecond"="oMxBS8hUnUeivjQG9vIcGXRyiSbUc2aC+s0aJfR1aXk="
+"LastModifiedTime"="gCFFvK+hxHkyalRdU+xz9MilaYbzk0dhJ5gtjyWHrXI="
+"LicenseCode"="J1tVvzXl1Ji4/aR+cJEc+uuFsqijtZH1/9bHHoyQ2Xk="
+"LicenseType"="jB6A/M7Fkz3J3UGvbdA7x8cxkyWOSFivfHzK3H1E/Gw="
+"NickName"="ERoWiua0w5GNq3M50r5xpGdZfvXkdtyJv8rOrsKhtWw="
+"RegUserName"="v3v1/c+aS9N5CI6p1dh8s7FarFFj71qszKwsX3tsG+c="
+"Signature"="ifvkvmKbFbKG8Bv0MJOSI4O8fEAgzVvwDJPLbotmcy8="
