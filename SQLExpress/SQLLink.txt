@@ -1,0 +1,4 @@
+SQL2022 Express: https://download.microsoft.com/download/7/f/8/7f8a9c43-8c8a-4f7c-9f92-83c18d96b681/SQL2019-SSEI-Expr.exe
+SQL2019 Express: https://download.microsoft.com/download/5/1/4/5145fe04-4d30-4b85-b0d1-39533663a2f1/SQL2022-SSEI-Expr.exe
+SQL2017 Express: https://download.microsoft.com/download/5/e/9/5e9b18cc-8fd5-467e-b5bf-bade39c51f73/SQLServer2017-SSEI-Expr.exe
+SQL2014 Express: https://www.microsoft.com/en-us/download/details.aspx?id=42299
