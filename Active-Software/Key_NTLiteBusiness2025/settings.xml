@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GeneralOptions xmlns="urn:schemas-nliteos-com:pn.v1">
+	<AutoUpdate>false</AutoUpdate>
+	<CheckUpdate>false</CheckUpdate>
+	<CheckUpdateDaily>false</CheckUpdateDaily>
+	<LastUpdateCheck>0</LastUpdateCheck>
+	<LicenseKey>Uibh+ovUQKls/wXgd4diS713yY4J0DyJ21y+O/JkFjy4ZMFMsk9aK55GHmqU5U5K</LicenseKey>
+	<ProxyMode>1</ProxyMode>
+	<SilenceProUpgrade>false</SilenceProUpgrade>
+	<SkipProUpgrade>false</SkipProUpgrade>
+	<VisualStyle>2</VisualStyle>
+</GeneralOptions>
