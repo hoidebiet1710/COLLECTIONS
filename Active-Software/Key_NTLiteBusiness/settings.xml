@@ -8,5 +8,5 @@
 	<ProxyMode>1</ProxyMode>
 	<SilenceProUpgrade>false</SilenceProUpgrade>
 	<SkipProUpgrade>false</SkipProUpgrade>
-	<VisualStyle>1</VisualStyle>
+	<VisualStyle>2</VisualStyle>
 </GeneralOptions>
