@@ -81,15 +81,13 @@ Remove-Item -Force -ErrorAction SilentlyContinue "$env:userprofile\AppData\Roami
 Write-Output "Removing scheduled task"
 Get-ScheduledTask -TaskPath '\' -TaskName 'OneDrive*' -ea SilentlyContinue | Unregister-ScheduledTask -Confirm:$false
 
+foreach ($item in (ls "$env:WinDir\WinSxS\*onedrive*")) {
+	Takeown-Folder $item.FullName
+	rm -Recurse -Force $item.FullName
+}
+
 Write-Output "Restarting explorer"
 Start-Process "explorer.exe"
 
 Write-Output "Waiting for explorer to complete loading"
-Start-Sleep 10
-
-# This can break Windows Update and some system utilities, see #297.
-#Write-Output "Removing additional OneDrive leftovers"
-#foreach ($item in (Get-ChildItem "$env:WinDir\WinSxS\*onedrive*")) {
-#    Takeown-Folder $item.FullName
-#    Remove-Item -Recurse -Force $item.FullName
-#}
+Start-Sleep 3
