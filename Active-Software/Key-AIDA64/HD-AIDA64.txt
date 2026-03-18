@@ -1,0 +1,5 @@
+Copy the pkey.txt file to the installation folder of each product.
+Network: C:\Program Files\FinalWire\AIDA64 Network
+Business: C:\Program Files\FinalWire\AIDA64 Business
+Extreme: C:\Program Files\FinalWire\AIDA64 Extreme
+Engineer: C:\Program Files\FinalWire\AIDA64 Engineer
