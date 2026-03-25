@@ -4,26 +4,42 @@
       "version": "20.2.6.1025.3",
       "label": "Latest",
       "id": "751092",
-      "mirror_id": "872385"
+      "mirror_id": "872385",
+      "release_date": "2026-01-07"
     },
     {
       "version": "20.2.6.1025.2",
+      "label": "",
       "id": "750000",
-      "mirror_id": "849936"
+      "mirror_id": "849936",
+      "release_date": "2025-12-01"
+    }
+  ],
+  "12-13": [
+    {
+      "version": "19.5.8.1059.2",
+      "label": "Stable",
+      "id": "743356",
+      "mirror_id": "849934",
+      "release_date": "2024-08-15"
     }
   ],
   "10-11": [
     {
       "version": "18.7.6.1010.3",
+      "label": "Stable",
       "id": "30312",
-      "mirror_id": "773229"
+      "mirror_id": "773229",
+      "release_date": "2023-05-10"
     }
   ],
   "8-9": [
     {
       "version": "17.11.3.1010.2",
+      "label": "Legacy",
       "id": "29728",
-      "mirror_id": "773230"
+      "mirror_id": "773230",
+      "release_date": "2022-03-20"
     }
   ]
 }
