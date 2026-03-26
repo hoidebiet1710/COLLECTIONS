@@ -69,7 +69,7 @@
     { "AppId": "Microsoft.XboxSpeechToTextOverlay" },
     { "AppId": "Microsoft.YourPhone" },
     { "AppId": "Microsoft.ZuneMusic" },
-    { "AppId": "MicrosoftWindows.CrossDevice" }
+    { "AppId": "MicrosoftWindows.CrossDevice" },
     { "AppId": "ACGMediaPlayer" },
     { "AppId": "ActiproSoftwareLLC" },
     { "AppId": "AdobeSystemsIncorporated.AdobePhotoshopExpress" },
