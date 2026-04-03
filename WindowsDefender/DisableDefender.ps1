@@ -58,7 +58,6 @@ $mpPrefs = @{
     DisableScanningNetworkFiles                   = $true
     DisableSshParsing                             = $true
     DisableTDTFeature                             = $true
-    DisableTlsParsing                             = $true
     EnableDnsSinkhole                             = $false
     EnableNetworkProtection                       = 0
     ExclusionIPAddress                            = '*'
@@ -78,7 +77,7 @@ Try {
 } Catch { }
 
 # Stop + Disable Defender Services
-$defenderServices = @("WinDefend","WdFilter","WdNisDrv","WdNisSvc")
+$defenderServices = @("WinDefend","WdFilter","WdNisDrv","WdNisSvc","wscsvc","SecurityHealthService")
 
 ForEach ($svc in $defenderServices) {
     Try {
@@ -86,6 +85,14 @@ ForEach ($svc in $defenderServices) {
         Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc" -Name "Start" -Value 4 -Force
     } Catch {     }
 }
+
+# Disable Defender Scheduled Tasks (Including Subfolders)
+try {
+    $defenderTasks = Get-ScheduledTask | Where-Object { $_.TaskPath -like "\Microsoft\Windows\Windows Defender\*" }
+    if ($defenderTasks) {
+        $defenderTasks | Disable-ScheduledTask -ErrorAction SilentlyContinue
+    } else { }
+} Catch { }
 
 Write-Host "[✓] Completed...."
 Start-Sleep -Seconds 2
