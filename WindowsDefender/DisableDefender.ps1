@@ -51,7 +51,6 @@ $mpPrefs = @{
     DisableHttpParsing                            = $true
     DisableInboundConnectionFiltering             = $true
     DisableNetworkProtectionPerfTelemetry         = $true
-    DisableRdpParsing                             = $true
     DisableRemovableDriveScanning                 = $true
     DisableRestorePoint                           = $true
     DisableScanningMappedNetworkDrivesForFullScan = $true
