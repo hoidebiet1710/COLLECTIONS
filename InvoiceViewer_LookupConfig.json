@@ -1,4 +1,8 @@
 {
-    "5701291099":  "https://wyndhamhalong-tt78.vnpt-invoice.com.vn/?strFkey=",
-    "0100144118":  "https://intercontinental-tt78.vnpt-invoice.com.vn/?strFkey="
+    "5701291099": [
+        "https://wyndhamhalong-tt78.vnpt-invoice.com.vn/?strFkey=",
+    ],
+    "0100144118": [
+        "https://intercontinental-tt78.vnpt-invoice.com.vn/?strFkey="
+    ]
 }
