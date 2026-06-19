@@ -1,0 +1,81 @@
+{
+  "TaxDeclarationConfig": {
+    "ShortTaxName": {
+      "ExactMappings": {
+        "842": "01_GTGT_TT80.2021",
+        "01": "01_GTGT_TT26.2015",
+        "864": "05_KK_TNCN_TT80.2021",
+        "824": "01_FCT_TT80.2021",
+        "394": "05_KK_TNCN_TT92.2015",
+        "953": "05_QTT_TNCN_TT80.2021",
+        "892": "03_QTT_TNDN_TT80.2021",
+        "03": "QTT_TNDN_TT151.2014",
+        "683": "BCTC_B01a-DNN_TT133.2016",
+        "102": "BC26-AC_TT39.2014",
+        "06": "TB01_AC_TBPhathanhHoadon_TT26.2015",
+        "107": "TB03_AC_TBHuyHoadon_TT39.2014",
+        "302": "Tonghop_NPT_TT156.2013",
+        "1137": "DK_20-DK-TH-GDT_TT86.2024"
+      },
+      "FallbackRules": [
+        { "Pattern": "GIÁ TRỊ GIA TĂNG", "Result": "GTGT" },
+        { "Pattern": "THU NHẬP CÁ NHÂN", "Result": "TNCN" },
+        { "Pattern": "THU NHẬP DOANH NGHIỆP", "Result": "TNDN" },
+        { "Pattern": "BÁO CÁO TÀI CHÍNH", "Result": "BCTC" }
+      ],
+      "DefaultResult": "TOKHAIKHAC"
+    },
+    
+    "TaxTypeSuffix": {
+      "DefaultResult": "L00",
+      "Mappings": {
+        "C": "L00",
+        "B": "bs{soLan}"
+      }
+    },
+    
+    "PeriodFormatting": {
+      "EmptyResult": "NOPERIOD",
+      "TypeInferenceRules": [
+        { "Pattern": "QUY|QUÝ", "Type": "Q" },
+        { "Pattern": "THANG|THÁNG", "Type": "T" },
+        { "Pattern": "NAM|NĂM", "Type": "Y" },
+        { "Pattern": "NGAY|Ngày", "Type": "D" }
+      ],
+      "FormatRules": {
+        "Q": {
+          "Patterns": [
+            { "Regex": "(\\d{1})\\s*/\\s*(\\d{4})", "Template": "Q$1-$2" },
+            { "Regex": "(\\d{4})", "Template": "Q-$1" }
+          ],
+          "FallbackSanitize": { "Regex": "[\\\\/:*?\"<>|\\s]", "ReplaceWith": "_" }
+        },
+        "T": {
+          "Patterns": [
+            { "Regex": "(\\d{1,2})\\s*/\\s*(\\d{4})", "Template": "T$1-$2" },
+            { "Regex": "(\\d{4})", "Template": "T-$1" }
+          ],
+          "FallbackSanitize": { "Regex": "[\\\\/:*?\"<>|\\s]", "ReplaceWith": "_" }
+        },
+        "Y": {
+          "Patterns": [
+            { "Regex": "(\\d{4})", "Template": "Y$1" }
+          ],
+          "FallbackSanitize": { "Regex": "[\\\\/:*?\"<>|\\s]", "ReplaceWith": "_" }
+        },
+        "D": {
+          "Patterns": [
+            { "Regex": "(\\d{1,2})\\s*/\\s*(\\d{1,2})\\s*/\\s*(\\d{4})", "Template": "D$1-$2-$3" },
+            { "Regex": "(\\d{4})\\s*[-/]\\s*(\\d{1,2})\\s*[-/]\\s*(\\d{1,2})", "Template": "D$1-$2-$3" }
+          ],
+          "FallbackSanitize": { "Regex": "[\\\\/:*?\"<>|\\s]", "ReplaceWith": "_" }
+        },
+        "Default": {
+          "PreSanitize": { "Regex": "/", "ReplaceWith": "-" },
+          "Patterns": [],
+          "FallbackSanitize": { "Regex": "[\\\\/:*?\"<>|]", "ReplaceWith": "_" }
+        }
+      }
+    }
+  }
+}
