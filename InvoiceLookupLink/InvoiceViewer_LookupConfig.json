@@ -4,9 +4,7 @@
                        "Links":  "https://thiennhienkinggreen-tt78.vnpt-invoice.com.vn/?strFkey="
                    },
     "0300588569-007":  {
-                           "Links":  [
-                                         "https://hddt.vinamilk.com.vn/SearchbyFkeyVINAMIL"
-                                     ],
+                           "Links":  "https://hddt.vinamilk.com.vn/SearchbyFkeyVINAMIL",
                            "MaTraCuuField":  "Extra2"
                        },
     "0200578327-006":  {
@@ -29,31 +27,13 @@
                        "MaTraCuuField":  "",
                        "Links":  "https://tracuu.einvoice365.com/"
                    },
-    "0312617990":  {
-                       "MaTraCuuField":  "",
-                       "Links":  [
-
-                                 ]
-                   },
     "0105012605":  {
                        "MaTraCuuField":  "",
                        "Links":  "https://tanlucmienbac-tt78.vnpt-invoice.com.vn/?strFkey="
                    },
-    "0313963672":  {
-                       "MaTraCuuField":  "",
-                       "Links":  [
-
-                                 ]
-                   },
     "0108432911":  {
                        "MaTraCuuField":  "",
                        "Links":  "https://tracuu.einvoice365.com/"
-                   },
-    "0106869738":  {
-                       "MaTraCuuField":  "",
-                       "Links":  [
-
-                                 ]
                    },
     "0316183342":  {
                        "MaTraCuuField":  "",
