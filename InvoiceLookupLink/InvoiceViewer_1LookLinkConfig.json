@@ -30,4 +30,8 @@
                        "Link":  "https://ctyskhanhhoa-tt78.vnpt-invoice.com.vn/?strFkey=",
                        "MaTraCuuField":  ""
                    }
+    "_EasyInvoice": {
+                       "LinkField": "PortalLink",
+                       "MaTraCuuField": "Fkey"
+                   }
 }
