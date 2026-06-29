@@ -4,7 +4,7 @@
                            "Link":  "https://hddt.vinamilk.com.vn/SearchbyFkeyVINAMILK/Index/",
                            "MaTraCuuField":  "Extra2"
                        },
-    "5700101820":  "https://halongtourvina-tt78.vnpt-invoice.com.vn?strFkey=",
+    "0110549057":  "https://tracuu.einvoice365.com/",
     "0314071202-001":  "https://vieclam24hhn-tt78.vnpt-invoice.com.vn/?strFkey=",
     "0100144118":  "https://intercontinental-tt78.vnpt-invoice.com.vn/?strFkey=",
     "0305295830":  "https://vanthinhphu-tt78.vnpt-invoice.com.vn/?strFkey=",
@@ -13,21 +13,25 @@
                        "MaTraCuuField":  "Extra1"
                    },
     "0200578327-006":  "https://pullmanhaiphong-tt78.vnpt-invoice.com.vn/?strFkey=",
-    "5701291099":  "https://wyndhamhalong-tt78.vnpt-invoice.com.vn/?strFkey=",
     "0105012605":  "https://tanlucmienbac-tt78.vnpt-invoice.com.vn/?strFkey=",
     "4200338918-006":  {
                            "Link":  "https://yskhhn-tt78.vnpt-invoice.com.vn/?strFkey=",
                            "MaTraCuuField":  ""
                        },
-    "0108432911":  "https://tracuu.einvoice365.com/",
-    "0316183342":  "https://tracuuhd.smartsign.com.vn/",
+    "0316606823":  {
+                       "Link":  "https://srt.tracuuhoadon.online/",
+                       "MaTraCuuField":  "Mã TC"
+                   },
     "0315275368":  {
                        "Link":  "https://hddt.nhathuoclongchau.com.vn/",
                        "MaTraCuuField":  "Liên hệ NCC"
                    },
-    "0110549057":  "https://tracuu.einvoice365.com/",
+    "0316183342":  "https://tracuuhd.smartsign.com.vn/",
+    "0108432911":  "https://tracuu.einvoice365.com/",
     "4200338918":  {
                        "Link":  "https://ctyskhanhhoa-tt78.vnpt-invoice.com.vn/?strFkey=",
                        "MaTraCuuField":  ""
-                   }
+                   },
+    "5700101820":  "https://halongtourvina-tt78.vnpt-invoice.com.vn?strFkey=",
+    "5701291099":  "https://wyndhamhalong-tt78.vnpt-invoice.com.vn/?strFkey="
 }
