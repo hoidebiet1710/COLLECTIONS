@@ -11,7 +11,7 @@
         "892": "03_QTT_TNDN_TT80.2021",
         "03": "QTT_TNDN_TT151.2014",
         "683": "BCTC_B01a-DNN_TT133.2016",
-        "402": "BCTC_B01-DN_TT200.2014"
+        "402": "BCTC_B01-DN_TT200.2014",
         "102": "BC26-AC_TT39.2014",
         "06": "TB01_AC_TBPhathanhHoadon_TT26.2015",
         "107": "TB03_AC_TBHuyHoadon_TT39.2014",
@@ -22,7 +22,8 @@
         { "Pattern": "GIÁ TRỊ GIA TĂNG", "Result": "GTGT" },
         { "Pattern": "THU NHẬP CÁ NHÂN", "Result": "TNCN" },
         { "Pattern": "THU NHẬP DOANH NGHIỆP", "Result": "TNDN" },
-        { "Pattern": "BÁO CÁO TÀI CHÍNH", "Result": "BCTC" }
+        { "Pattern": "BÁO CÁO TÀI CHÍNH", "Result": "BCTC" },
+        { "Pattern": "MÔN BÀI", "Result": "MB" }
       ],
       "DefaultResult": "TOKHAIKHAC"
     },
