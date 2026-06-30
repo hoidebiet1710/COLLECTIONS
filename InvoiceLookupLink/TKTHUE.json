@@ -42,7 +42,7 @@
         { "Pattern": "QUY|QUÝ", "Type": "Q" },
         { "Pattern": "THANG|THÁNG", "Type": "T" },
         { "Pattern": "NAM|NĂM", "Type": "Y" },
-        { "Pattern": "NGAY|Ngày", "Type": "D" }
+        { "Pattern": "NGAY|NGÀY", "Type": "D" }
       ],
       "FormatRules": {
         "Q": {
