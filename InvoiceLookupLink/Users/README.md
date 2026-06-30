@@ -1,6 +1,4 @@
-Đoạn code này có thể mô tả chính xác như sau:
-
-> **Quản lý cấu hình liên kết tra cứu hóa đơn và đồng bộ GitHub.**
+**Quản lý cấu hình liên kết tra cứu hóa đơn và đồng bộ GitHub.**
 >
 > * Tự động tạo thư mục `Invoice` trong `%APPDATA%` để lưu toàn bộ dữ liệu cấu hình cục bộ.
 > * Quản lý các file cấu hình tra cứu hóa đơn theo **MST**, **MSTTCGP** và **Tên tổ chức giải pháp**.
