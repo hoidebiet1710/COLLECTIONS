@@ -1,0 +1,49 @@
+{
+  "TenBangGia": "Giá điện sinh hoạt",
+  "DonVi": "đồng/kWh",
+  "VAT": 0.08,
+  "BacGia": [
+    {
+      "Bac": 1,
+      "TuKwh": 0,
+      "DenKwh": 50,
+      "SoKwh": 50,
+      "DonGia": 1984
+    },
+    {
+      "Bac": 2,
+      "TuKwh": 51,
+      "DenKwh": 100,
+      "SoKwh": 50,
+      "DonGia": 2050
+    },
+    {
+      "Bac": 3,
+      "TuKwh": 101,
+      "DenKwh": 200,
+      "SoKwh": 100,
+      "DonGia": 2380
+    },
+    {
+      "Bac": 4,
+      "TuKwh": 201,
+      "DenKwh": 300,
+      "SoKwh": 100,
+      "DonGia": 2998
+    },
+    {
+      "Bac": 5,
+      "TuKwh": 301,
+      "DenKwh": 400,
+      "SoKwh": 100,
+      "DonGia": 3350
+    },
+    {
+      "Bac": 6,
+      "TuKwh": 401,
+      "DenKwh": null,
+      "SoKwh": null,
+      "DonGia": 3460
+    }
+  ]
+}
