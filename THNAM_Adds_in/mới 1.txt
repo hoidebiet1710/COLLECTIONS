@@ -1,0 +1,8 @@
+Hướng dẫn
+Với file NumberToWord_Word.dotm thực hiện copy vào đường dẫn %APPDATA%\Microsoft\Word\STARTUP
+Với File NumberToWord_Excel.xlam 
++ Copy file vào %AppData%\Microsoft\AddIns
++ Hoặc File → Options → Add-ins
+Ở cuối cửa sổ: Manage: Excel Add-ins -> Go...
+Cửa sổ Add-in hiện ra
+Nhấn Browse...=> Chọn nơi lưu trữ NumberToWord_Excel.xlam là C:\THNAM_Adds_in => OK
