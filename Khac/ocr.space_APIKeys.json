@@ -1,0 +1,17 @@
+{
+  "CurrentIndex": 0,
+  "ApiKeys": [
+    {
+      "Key": "K84759657288957",
+      "Enabled": true
+    },
+    {
+      "Key": "K83376830788957",
+      "Enabled": true
+    },
+    {
+      "Key": "K11111111111111",
+      "Enabled": false
+    }
+  ]
+}
