@@ -365,16 +365,16 @@ for line in lines:
     except (KeyError, ValueError) as e:
         print(f"⚠️ Bỏ qua dòng lỗi: {e}")
         continue
-
+    
+    # --- Lưu markdown từ layoutParsingResults (bảng biểu) ---
     for res in result.get("layoutParsingResults", []):
-        # --- Lưu markdown ---
         md_filename = os.path.join(output_dir, f"doc_{page_num}.md")
         try:
             with open(md_filename, "w", encoding="utf-8") as md_file:
                 md_file.write(res["markdown"]["text"])
         except KeyError:
             print(f"⚠️ Trang {page_num} thiếu markdown.text")
-
+        
         # --- Lưu ảnh trong markdown ---
         for img_path, img_url in res.get("markdown", {}).get("images", {}).items():
             full_img_path = os.path.join(output_dir, img_path)
@@ -382,15 +382,51 @@ for line in lines:
                                      desc=f"md-img[{page_num}]")
             if not ok:
                 print(f"⚠️ Không tải được ảnh markdown: {img_url}")
-
+        
         # --- Lưu outputImages ---
         for img_name, img_url in res.get("outputImages", {}).items():
             filename = os.path.join(output_dir, f"{img_name}_{page_num}.jpg")
             ok = download_with_retry(img_url, save_path=filename,
                                      desc=f"out-img[{page_num}]")
             if not ok:
-                print(f"⚠️ Không tải được outputImage: {img_url}")
-
+                print(f"️ Không tải được outputImage: {img_url}")
+        
+        page_num += 1
+    
+    # --- XỬ LÝ THÊM: Lưu text từ textDetectionResults (chữ thường) ---
+    text_results = result.get("textDetectionResults", [])
+    if text_results:
+        text_filename = os.path.join(output_dir, f"text_{page_num}.txt")
+        try:
+            with open(text_filename, "w", encoding="utf-8") as text_file:
+                for text_item in text_results:
+                    text_content = text_item.get("text", "")
+                    if text_content:
+                        text_file.write(f"{text_content}\n")
+            print(f"✅ Đã lưu {len(text_results)} dòng text vào {text_filename}")
+        except Exception as e:
+            print(f"⚠️ Lỗi khi lưu text: {e}")
+    
+    # --- XỬ LÝ THÊM: Lưu OCR results (nếu có) ---
+    ocr_results = result.get("ocrResults", [])
+    if ocr_results:
+        ocr_filename = os.path.join(output_dir, f"ocr_{page_num}.txt")
+        try:
+            with open(ocr_filename, "w", encoding="utf-8") as ocr_file:
+                for ocr_item in ocr_results:
+                    # Xử lý cả trường hợp ocr_item là dict hoặc list
+                    if isinstance(ocr_item, dict):
+                        text_content = ocr_item.get("text", "")
+                    else:
+                        text_content = str(ocr_item)
+                    if text_content:
+                        ocr_file.write(f"{text_content}\n")
+            print(f"✅ Đã lưu {len(ocr_results)} dòng OCR vào {ocr_filename}")
+        except Exception as e:
+            print(f"⚠️ Lỗi khi lưu OCR: {e}")
+    
+    # Nếu không có layoutParsingResults nhưng có các kết quả khác, vẫn tăng page_num
+    if not result.get("layoutParsingResults", []):
         page_num += 1
 
 print(f"✅ Đã lưu kết quả vào thư mục: {output_dir}")
