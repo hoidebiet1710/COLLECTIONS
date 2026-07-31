@@ -50,7 +50,7 @@
     "4000382437":  {
                        "Links":  [
                                      {
-                                         "Link":  "https://palmgardenresort-tt78.vnpt-invoice.com.vn/?strFkey=MCCQT",
+                                         "Link":  "https://palmgardenresort-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
                                          "MaTraCuuField":  "MCCQT"
                                      }
                                  ]
