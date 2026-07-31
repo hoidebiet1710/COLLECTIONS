@@ -1,7 +1,7 @@
 {
     "0313857321":  {
-                       "Link":  "https://thiennhienkinggreen-tt78.vnpt-invoice.com.vn/?strFkey=",
-                       "MaTraCuuField":  ""
+                       "Link":  "https://thiennhienkinggreen-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
+                       "MaTraCuuField":  "MCCQT"
                    },
     "4200456848-013":  {
                            "Link":  "https://e-invoice-tt78.vingroup.net/",
@@ -16,28 +16,28 @@
                            "MaTraCuuField":  ""
                        },
     "0100144118":  {
-                       "Link":  "https://intercontinental-tt78.vnpt-invoice.com.vn/?strFkey=",
-                       "MaTraCuuField":  ""
+                       "Link":  "https://intercontinental-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
+                       "MaTraCuuField":  "MCCQT"
                    },
     "0305295830":  {
-                       "Link":  "https://vanthinhphu-tt78.vnpt-invoice.com.vn/?strFkey=",
-                       "MaTraCuuField":  ""
+                       "Link":  "https://vanthinhphu-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
+                       "MaTraCuuField":  "MCCQT"
                    },
     "0102018260":  {
                        "Link":  "http://einvoice.pico.vn/PicoSearchInvoicebyFkey/Index/",
                        "MaTraCuuField":  "Extra1"
                    },
     "0200578327-006":  {
-                           "Link":  "https://pullmanhaiphong-tt78.vnpt-invoice.com.vn/?strFkey=",
-                           "MaTraCuuField":  ""
+                           "Link":  "https://pullmanhaiphong-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
+                           "MaTraCuuField":  "MCCQT"
                        },
     "0105012605":  {
-                       "Link":  "https://tanlucmienbac-tt78.vnpt-invoice.com.vn/?strFkey=",
-                       "MaTraCuuField":  ""
+                       "Link":  "https://tanlucmienbac-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
+                       "MaTraCuuField":  "MCCQT"
                    },
     "4200338918-006":  {
-                           "Link":  "https://yskhhn-tt78.vnpt-invoice.com.vn/?strFkey=",
-                           "MaTraCuuField":  ""
+                           "Link":  "https://yskhhn-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
+                           "MaTraCuuField":  "MCCQT"
                        },
     "4200456848-015":  {
                            "Link":  "https://e-invoice-tt78.vingroup.net/",
@@ -68,16 +68,16 @@
                        "MaTraCuuField":  ""
                    },
     "4200338918":  {
-                       "Link":  "https://ctyskhanhhoa-tt78.vnpt-invoice.com.vn/?strFkey=",
-                       "MaTraCuuField":  ""
+                       "Link":  "https://ctyskhanhhoa-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
+                       "MaTraCuuField":  "MCCQT"
                    },
     "5700101820":  {
-                       "Link":  "https://halongtourvina-tt78.vnpt-invoice.com.vn?strFkey=",
-                       "MaTraCuuField":  ""
+                       "Link":  "https://halongtourvina-tt78.vnpt-invoice.com.vn?strFkey={mccqt}",
+                       "MaTraCuuField":  "MCCQT"
                    },
     "5701291099":  {
-                       "Link":  "https://wyndhamhalong-tt78.vnpt-invoice.com.vn/?strFkey=",
-                       "MaTraCuuField":  ""
+                       "Link":  "https://wyndhamhalong-tt78.vnpt-invoice.com.vn/?strFkey={mccqt}",
+                       "MaTraCuuField":  "MCCQT"
                    },
     "0316606823":  {
                        "Link":  "https://srt.tracuuhoadon.online/",
