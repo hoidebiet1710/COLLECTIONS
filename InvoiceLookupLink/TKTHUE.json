@@ -5,7 +5,7 @@
         "842": "01_GTGT_TT80.2021",
         "01": "01_GTGT_TT26.2015",
         "864": "05_KK_TNCN_TT80.2021",
-        "824": "01_FCT_TT80.2021",
+        "824": "01_LPMB_TT80.2021",
         "394": "05_KK_TNCN_TT92.2015",
         "953": "05_QTT_TNCN_TT80.2021",
         "892": "03_QTT_TNDN_TT80.2021",
@@ -17,6 +17,7 @@
         "107": "TB03_AC_TBHuyHoadon_TT39.2014",
         "302": "Tonghop_NPT_TT156.2013",
         "1137": "DK_20-DK-TH-GDT_TT86.2024"
+		"1135": "DK_05-ĐK-TH-TCT_TT86.2024"
       },
       "FallbackRules": [
         { "Pattern": "GIÁ TRỊ GIA TĂNG", "Result": "GTGT" },
