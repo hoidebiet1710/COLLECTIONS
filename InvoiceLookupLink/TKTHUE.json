@@ -16,8 +16,9 @@
         "06": "TB01_AC_TBPhathanhHoadon_TT26.2015",
         "107": "TB03_AC_TBHuyHoadon_TT39.2014",
         "302": "Tonghop_NPT_TT156.2013",
-        "1137": "DK_20-DK-TH-GDT_TT86.2024"
-		"1135": "DK_05-ĐK-TH-TCT_TT86.2024"
+        "1137": "DK_20-DK-TH-GDT_TT86.2024",
+		"1135": "DK_05-ĐK-TH-TCT_TT86.2024",
+		"55": "01_MBAI_TT156.2013"
       },
       "FallbackRules": [
         { "Pattern": "GIÁ TRỊ GIA TĂNG", "Result": "GTGT" },
